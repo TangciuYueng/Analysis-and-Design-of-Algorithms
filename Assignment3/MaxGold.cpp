@@ -20,27 +20,30 @@ bool isStart(vector<vector<int>>& grid, int x, int y) {
     return cnt <= 2;
 }
 // 递归函数 
-void help(vector<vector<int>>& grid, vector<vector<bool>>& vis, int x, int y) {
+void help(vector<vector<int>>& grid, int x, int y) {
     ans = max(ans, temp);
     // 出界
     if (x < 0 || y < 0 || x >= m || y >= n) {
         return;
     }
-    // 没东西
-    if (grid[x][y] == 0 || vis[x][y]) {
+    // 没东西或访问过 
+    if (grid[x][y] == 0) {
         return;
     }
     // 当前收获
     temp += grid[x][y];
-    // 访问过
-    vis[x][y] = true;
+    // 记录原来金矿数量
+	int goldBefore = grid[x][y];
+	// 更改为0表示访问过
+    grid[x][y] = 0; 
     // 遍历四个方向
     for (int i = 0; i < 4; ++i) {
         int new_x = x + dx[i];
         int new_y = y + dy[i];
-        help(grid, vis, new_x, new_y);
+        help(grid, new_x, new_y);
 	}
-    vis[x][y] = false;
+    // 回溯
+	grid[x][y] = goldBefore; 
     temp -= grid[x][y];
 }
 int getMaximumGold(vector<vector<int>>& grid) {
@@ -50,8 +53,7 @@ int getMaximumGold(vector<vector<int>>& grid) {
         for (int j = 0; j < n; ++j) {
            	// 判断是否为合适的起点 
            	if (grid[i][j] && isStart(grid, i, j))  {
-        		vector<vector<bool>> vis(m, vector<bool>(n, false));
-               	help(grid, vis, i, j);
+               	help(grid, i, j);
 			}
                 
         }
