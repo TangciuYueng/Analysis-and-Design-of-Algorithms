@@ -171,7 +171,7 @@ class seam_carving:
         cv2.imwrite(filename, self.out_image)
 
     
-filename = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict.png'
-filename_out = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict_resize.png'
+filename = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict.jpg'
+filename_out = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict_resize.jpg'
 
 obj = seam_carving(filename)
