@@ -166,9 +166,10 @@ void print_optimal(int** s, int i, int j) {
 ### 0-1背包问题
 - 代码
 ```cpp
+    // 先固定物品个数i，遍历每种背包重量j
     // weight数组的大小就是物品的个数
-    for (int i = 1; i < weight.size(); ++i) {
-        for (int j = 0; j <= bagWeight; ++j) {
+    for (int i = 0; i < weight.size(); ++i) {
+        for (int j = 0; j <= bagCapacity; ++j) {
             // 不够放第i个物品了
             if (j < weight[i])
                 dp[i][j] = dp[i - 1][j];
@@ -177,6 +178,43 @@ void print_optimal(int** s, int i, int j) {
                 dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
         }
     }
+    // 滚动数组空间压缩，实际上每一层的状态更新只需要用到上一层的记录
+    // 记录每个背包容量能装的最优值
+    vector<int> dp(bagCapacity + 1, 0);
+    for (int i = 1; i <= weight.size(); ++i) {
+        // 从大到小更新，因为要用到未更新的左边的上一层信息
+        for (int j = bagCapacity; j >= 0; --j) {
+            dp[j] = max(dp[j], dp[j - weight[i]] + value[i]);
+        }
+    }
+
+
+    // 记忆法
+    // 全局dp数组，-1
+    vector<vector<int>> dp(weight.size() + 1, vector<int>(bagCapacity + 1, -1))
+    // 初始值
+    for (int i = 0; i < dp.size(); ++i) {
+        dp[i][0] = 0;
+    }
+    for (int j = 0; j < dp[0].size(); ++j) {
+        dp[0][j] = 0;
+    }
+    int MFKnapsack(int i, int j) {
+        // 已经计算过，直接返回
+        if (dp[i][j] != -1) 
+            return dp[i][j];
+
+        // 装不下
+        if (j < weight[i])
+            dp[i][j] = dp[i - 1][j];
+        // 装得下
+        else
+            dp[i][j] = max(dp[i - 1][j], MFKnapsack(i - 1, j - weight[i]) + value[i]);
+        
+        return dp[i][j];
+    }
+    // 调用
+    MFKnapsack(weight.size() - 1, bagCapacity);
 ```
 - <font color='purple'>填表dp</font>
 - `dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i])`
