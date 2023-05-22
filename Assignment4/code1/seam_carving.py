@@ -1,15 +1,17 @@
 import cv2
 import numpy as np
 import sys
+import argparse
 
 class seam_carving:
     # 构造函数
-    def __init__(self, filename):
+    def __init__(self, in_file, out_file):
         # initialize parameter
-        self.filename = filename
+        self.filename = in_file
+        self.filename_out = out_file
         
         # read in image and store as np.float64 format
-        self.in_image = cv2.imread(filename).astype(np.float64)
+        self.in_image = cv2.imread(in_file).astype(np.float64)
         self.in_height, self.in_width = self.in_image.shape[: 2]
         # 设置为原图的一般
         self.out_height = self.in_image.shape[0] // 2
@@ -28,10 +30,11 @@ class seam_carving:
 
     def start(self):
         print(self.in_image.shape)
-        
+        # 对图像进行缩放 
         self.seams_carving()
 
-        self.save_picture(filename_out)
+        # 保存图片
+        self.save_picture(self.filename_out)
         
         print(self.out_image.shape)
 
@@ -80,7 +83,9 @@ class seam_carving:
         r_energy = np.absolute(cv2.Scharr(r, -1, 1, 0)) + np.absolute(cv2.Scharr(r, -1, 0, 1))
         return b_energy + g_energy + r_energy
 
-    # 动态规划正向
+    # 动态规划填写dp数组以及记录由来方向
+    # 输入：能量图
+    # 输出：动态规划数组、回溯路径数组
     def cumulative_map_forward(self, energy_map):
         m, n = energy_map.shape
         dp = np.copy(energy_map)
@@ -125,7 +130,9 @@ class seam_carving:
                         dp[i, j] = energy_map[i, j] + energy_map[i - 1, j + 1]
         return dp, path
 
-    # 返回要找的线位于每行的第几列
+    # 通过回溯路径数组找seam位于每行的第几列
+    # 输入：动态规划数组、回溯数组
+    # 输出：seam位于每行的列号数组
     def find_seam(self, dp, path):
         m, n = dp.shape
         seam_idx = np.zeros((m, ), dtype=np.uint32)
@@ -138,7 +145,9 @@ class seam_carving:
 
         return seam_idx        
             
-    # 删除一条线的像素
+    # 删除seam上的像素
+    # 输入：seam位于每行的列号数组
+    # 输出：无
     def delete_seam(self, seam_idx):
         m, n = self.out_image.shape[: 2]
         # 少一列
@@ -152,6 +161,7 @@ class seam_carving:
         
         self.out_image = np.copy(ans)
 
+    # 旋转图片
     def rotate_image(self, image, ccw):
         m, n, ch = image.shape
         output = np.zeros((n, m, ch))
@@ -171,7 +181,19 @@ class seam_carving:
         cv2.imwrite(filename, self.out_image)
 
     
-filename = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict.jpg'
-filename_out = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict_resize.jpg'
+# filename = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict.jpg'
+# filename_out = 'E:\\xx\\algorithm_design_analysis\\Assignment4\\pict_resize.jpg'
 
-obj = seam_carving(filename)
+# obj = seam_carving(filename)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='命令行参数')
+    parser.add_argument('--in', '-i', type=str, help='输入图片文件路径', required=True)
+    parser.add_argument('--out', '-o', type=str, help='输出图片文件路径', required=True)
+
+    args =  vars(parser.parse_args())
+    
+    in_file = args['in']
+    out_file = args['out']
+
+    obj = seam_carving(in_file, out_file)
