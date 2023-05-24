@@ -13,7 +13,7 @@ class seam_carving:
         # read in image and store as np.float64 format
         self.in_image = cv2.imread(in_file).astype(np.float64)
         self.in_height, self.in_width = self.in_image.shape[: 2]
-        # 设置为原图的一般
+        # 设置为原图的一半
         self.out_height = self.in_image.shape[0] // 2
         self.out_width = self.in_image.shape[1] // 2
 
