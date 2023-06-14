@@ -1,18 +1,82 @@
+## 搜索算法
+### 穷举搜索
+### 盲目搜索
+- DFS & 回溯
+- BFS
+- 分支限界
+- 博弈树($\alpha-\beta Search$)
+### 启发式搜索
+- $A^*算法$和最佳优先(Best-First Search)--迭代加深的$A^*算法$
+- $B^*,AO^*,SSS^*$等算法
+- Local Search, GA等算法
+## 问题描述
+搜索有给定属性的一个元素，在一个随着实体大小指数级或更快增长的domain中
+包括排列、组合、子集的形式
+最优化问题
 ## Exhausting Search by Enumerating
+- 用系统的方法，生成所有潜在解决方案的列表
+- 选择所有满足**约束条件(constrains)**的
+- 逐个评估潜在的解决方案，去掉不可行的，跟踪目前最好的
+- 公布找到的所求答案
 ## DFS and BFS
-## Backtracking
+### DFS
+- 更深，到了没有未访问过的死节点就回到上一个走过的边，从父节点找其他路径继续深度优先
+- 有多个孩子就按照**字典序**
+- 使用stack，第一次到达的放进去，变成死节点出来
+- 这里用递归表示，第一次遇到就进入递归函数，直到没有可以去的邻接节点了才退出递归
+```
+DFS(G)
+    count <- 0 // 记录第几步访问到该节点
+    mark each vertext with 0 // unvisited
+    for each vertex v \in V do
+        if v is marked with 0
+            dfs(v)
+
+dfs(v)
+    count <- count + 1
+    mark v with count
+    for each vertex u adjacent to v do
+        if u is marked with 0
+            dfs(w)
+```
+### BFS
+- 逐层访问
+- 使用队列
+```
+BFS(G)
+    count <- 0
+    mark each vertex with 0
+    for each vertex \in V do
+        if v is marked with 0
+            bfs(v)
+
+bfs(v)
+    count <- count + 1
+    mark v with count
+
+    initialize queue with v
+    while queue is note empty do
+        a <- front of queue
+        for each vertex adjacent to a do
+            if w is marked with 0
+                count <- count + 1
+                mark w with count 
+                add w to the end of the queue
+        remove a from the front of the queue
+```
+## Backtracking回溯法
 ### 方法概述
-- 系统性
-在包含问题的所有解的**解空间树**中，按照dfs的策略搜索
-- 跳跃性
-对于任一节点，判断以该节点为根的子树是否包含问题的解，若肯定不包含则跳过这个子树的搜索，逐层向其祖先节点回溯；否则进入子树继续按照dfs策略搜索
+- **系统性**
+在包含问题的**所有解**的**解空间树**中，按照dfs的策略搜索
+- **跳跃性**
+对于任一节点，判断**以该节点为根的子树是否包含问题的解**，若肯定不包含则跳过这个子树的搜索，逐层向其祖先节点**回溯**；否则进入子树继续**按照dfs**策略搜索
 ### 解空间
 - 解向量
-希望一个问题的解可以表示成为一个n元式$(x_1, x_2, x_3,.., x_n)$
+希望一个问题的解可以表示成为**一个n元式**$(x_1, x_2, x_3,.., x_n)$
 - 显约束
-对分量$x_i$的取值限定
+对分量$x_i$的取值限定(背包问题的背包容量限制)
 - 隐约束
-为满足问题的解而对**不同分量**之间施加的约束
+为满足问题的解而对**不同分量之间**施加的约束
 - 解空间
 对于问题的一个实例，解向量**满足显式约束**条件的所有多元组
 - 解空间树(搜索过程就是找一个or一些特别的叶节点)
@@ -216,7 +280,7 @@
 ## Branch & Bound
 ### 基本思想
 - 广度优先or最小耗费(最大效益)优先->队列or优先队列
-- 为了有效选择下一个扩展结点，在每一活结点处计算优先值，根据已经计算的优先值选择最有利的
+- 为了有效选择下一个扩展结点，在每一活结点处计算优先值，根据已经计算的优先值选择最有利的，以便尽快找出一个最优解
 ### 方法概述
 - 定义解空间
 - 确定树结构
@@ -232,7 +296,7 @@
 物品数量n = 3 重量w = (20, 15, 15) 价值v = (40, 25, 25) 背包容量c = 30<br/>需要对输入数据物品**价值密度**从大到小排列
   - 用FIFO队列求解
   ![](./ref/backtracking_and_BB_4.png)
-  这里死节点为超重
+  这里死节点为超重，就不加入队列了
   - 用优先队列求解，优先级为up_bound(UB)
   ![](./ref/backtracking_and_BB_5.png)
   - bound
@@ -317,4 +381,4 @@
 - 扩展方式
   - 分支限界法中仅有一次机会成为扩展结点。活结点一次性产生其所有儿子
 - 存储空间
-  - 分支限界法要求更大
+  - 分支限界法要求更大，内容容量有限时，回溯法成功的可能性更大
