@@ -10,7 +10,7 @@ to a **different representation** of the same instance
 - problem reduction**(问题化简)**
 to a **different problem** for which an algorithm is already available
 #### example 
-##### instance simplification实例变化
+##### instance simplification实例化简
   - 找数组中是否又**重复数字**
   数组**预排序**，顺序变了就算实例变化了
   - 找数组中出现**次数最大的**

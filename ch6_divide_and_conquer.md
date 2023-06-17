@@ -9,7 +9,7 @@
     - $T(n) = \alpha \times T(n / \beta) + f(n)$
     - $f(n)$为combine的消耗
     - $\alpha$ 为需要解决的子问题的个数
-    - $\beta$ 为一次分成多少个子问题
+    - $n/\beta$ 子问题规模
     - Master Theorem: if $f(n) \in \Theta(n^{d}) \And d \gt 0$
         $ T(n)=\begin{cases}
                 \ \Theta(n^{d})  \quad if \quad a \lt \beta^{d} \\
