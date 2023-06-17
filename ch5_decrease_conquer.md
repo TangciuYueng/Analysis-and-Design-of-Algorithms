@@ -47,7 +47,7 @@
         - 递推方程: $C_{worst}(n) = C_{worst}(\lceil n / 2 \rceil) + 1$
         - 初始值: $C_{worst}(1) = 1$
       - Best case
-        - $C_{bast}(n) = 1$一次就找到了
+        - $C_{best}(n) = 1$一次就找到了
       - Average case
         - 利用平衡二叉搜索树
         - $A(n) = \frac{1}{n} \sum_{i = 1}^{k}i*2^{i - 1} \approx \log(n + 1) - 1 $
