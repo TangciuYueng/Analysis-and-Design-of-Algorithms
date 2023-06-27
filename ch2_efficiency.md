@@ -5,6 +5,10 @@ algorithm function -> A
 算法效率包括
 - Time efficiency T(N, I)
 - Space efficiency S(N, I)
+### 一些公式
+#### 斐波那契数列
+$F_n = C_1(\frac{1 + \sqrt{5}}{2})^n + C_2(\frac{1 - \sqrt{5}}{2})^n$
+$1 + 2^2 + 3^3 + ... + n^2 = \frac{n(n + 1)(2n + 1)}{6}$
 ### 分析框架
 - Measure an input's size
 - Units for measuring running time
@@ -90,7 +94,7 @@ basic operation: `A[i] = A[j]` comparison operation
 check: 
     - worst case
     没有重复的，遍历完
-    $C_worst(n) = \sum^{n-2}_{i=0}\sum^{n-1}_{j=i+1}1 = \frac{n(n-1)}{2} \in \Theta(n^2)$
+    $C_{worst}(n) = \sum^{n-2}_{i=0}\sum^{n-1}_{j=i+1}1 = \frac{n(n-1)}{2} \in \Theta(n^2)$
 ...
 ##### 矩阵乘法
 $O(n^3)$

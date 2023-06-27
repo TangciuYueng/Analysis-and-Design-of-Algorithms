@@ -7,21 +7,21 @@
   - Combine
 - 递推关系
     - $T(n) = \alpha \times T(n / \beta) + f(n)$
-    - $f(n)$为combine的消耗
+    - $f(n)$为divide&combine的消耗
     - $\alpha$ 为需要解决的子问题的个数
     - $n/\beta$ 子问题规模
     - Master Theorem: if $f(n) \in \Theta(n^{d}) \And d \gt 0$
         $ T(n)=\begin{cases}
-                \ \Theta(n^{d})  \quad if \quad a \lt \beta^{d} \\
-                \ \Theta(n^{d}\log{n}) \quad if \quad a = \beta^{d} \\
-                \ \Theta(n^{\log_{\beta}{\alpha}}) \quad if \quad a \gt \beta^{d}
+                \ \Theta(n^{d})  \quad if \quad \alpha \lt \beta^{d} \\
+                \ \Theta(n^{d}\log{n}) \quad if \quad \alpha = \beta^{d} \\
+                \ \Theta(n^{\log_{\beta}{\alpha}}) \quad if \quad \alpha \gt \beta^{d}
                 \end{cases}
         $
         - 需要注意的是求出来的是增长阶数
         - 具体的还要初始条件
 - 例子
     - **MergeSort**
-    - **BinarySort**
+    - **BinarySearch**
     - **QuickSort**
     - **Multiplication of Large Integers**
       - $X \times Y$ X Y 都是n位?
@@ -65,5 +65,18 @@
         $
         $M(n) = 7M(n/2) \in n^{log_2{7}}$
 - 思考题
-    - 给定2个大整数u和v，分别有m位和n位数字，且m<=n。用通常的乘法求uv的值需要O(mn)时间。当m比n小得多时，试设计一个算法，在上述情况下用$O(nm^{log^{3/2}})$时间求出uv值。
+  - 实现upper_bound和找到小于x的最大元素
+  ```py
+  def fun(a, val):
+    r = len(a) - 1
+    l = 0
+    while l <= r:
+        mid = (l + r) // 2
+        if val >= a[mid]:
+            l = mid + 1
+        else:
+            r = mid - 1
+    return a[mid]
+  ```
+  - 给定2个大整数u和v，分别有m位和n位数字，且m<=n。用通常的乘法求uv的值需要O(mn)时间。当m比n小得多时，试设计一个算法，在上述情况下用$O(nm^{log^{3/2}})$时间求出uv值。
     - 将v分解位n / m段，每段为m位，然后进行n / m次m位乘法，故时间复杂度位$O(\frac{n}{m}  \times m^{log{3}})$
